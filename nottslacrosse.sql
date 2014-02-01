@@ -1,0 +1,62 @@
+DROP TABLE IF EXISTS matchTeams;
+DROP TABLE IF EXISTS roster;
+DROP TABLE IF EXISTS scheduleResults;
+DROP TABLE IF EXISTS players;
+DROP TABLE IF EXISTS Teams;
+DROP TABLE IF EXISTS Universities;
+DROP TABLE IF EXISTS News;
+	 
+	
+	CREATE TABLE scheduleResults(
+	    matchID INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+		matchDateTime datetime NOT NULL,
+		location VARCHAR(152) NOT NULL
+	) ENGINE=InnoDB;
+	 
+	CREATE TABLE Teams(
+	teamID INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+	uniid int NOT NULL,
+	class int not null
+	) ENGINE=InnoDB;
+
+
+	 
+	CREATE TABLE Universities(
+	uniID INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+	uniName VARCHAR(127) NOT NULL
+	) ENGINE=InnoDB;
+	
+	 
+CREATE TABLE matchTeams(
+	    matchteamsID INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+		matchID INT NOT NULL,
+		teamID INT NOT NULL,
+		score INT,
+		CONSTRAINT fk_mt1 FOREIGN KEY (matchID) REFERENCES scheduleResults(matchID),
+		CONSTRAINT fk_mt2 FOREIGN KEY (teamID) REFERENCES Teams(teamID)
+	) ENGINE=InnoDB;
+
+
+
+	CREATE TABLE players(
+	    playerID INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+	    playerName VARCHAR(127) NOT NULL,
+		teamID INT,
+		CONSTRAINT fk_p1 FOREIGN KEY (teamID) REFERENCES Teams(teamID)
+	) ENGINE=InnoDB;
+
+	CREATE TABLE roster(
+	position VARCHAR(127) NOT NULL,
+	MatchID INT NOT NULL,
+	playerID INT NOT NULL,
+	CONSTRAINT pk_r1 PRIMARY KEY (playerID, matchID),
+	CONSTRAINT fk_r1 FOREIGN KEY (playerID) REFERENCES players(playerID),
+	CONSTRAINT fk_r2 FOREIGN KEY (matchID) REFERENCES scheduleResults (matchID)
+	) ENGINE=InnoDB;
+		 
+	
+		CREATE TABLE News(
+	    newsID INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+	    newsHeadline VARCHAR(127) NOT NULL,
+		newsStory VARCHAR(8000) NOT NULL
+	) ENGINE=InnoDB;
